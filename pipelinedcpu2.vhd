@@ -526,7 +526,7 @@ U28: MUX32WB port map(ALUResWB,MEMRDataWB,MemtoRegWB,WritedataWB);
 
 
 -- PCenSt <='1';
-DEBUG_INSTRUCTION <= InstructionID;
+DEBUG_INSTRUCTION <= InstructionIF;
 DEBUG_TMP_REGS <= tmpReg;
 DEBUG_SAVED_REGS <= savedReg;
 DEBUG_MEM_CONTENTS <= MEMContents;
