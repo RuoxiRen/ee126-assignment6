@@ -24,6 +24,8 @@ architecture tb of plCPU_tb is
      signal DEBUG_RegWrite, DEBUG_RegWrite_EX, DEBUG_RegWrite_MEM, DEBUG_RegWrite_WB:  std_logic;
      -- instruction is a branch or a jump.
      signal DEBUG_Branch, DEBUG_Jump:  std_logic;
+     --Value of PC.write_enable
+     signal DEBUG_PC_WRITE_ENABLE : STD_LOGIC;
 
      --The current instruction (Instruction output of IMEM)
      signal DEBUG_INSTRUCTION :  STD_LOGIC_VECTOR(31 downto 0);
@@ -31,11 +33,10 @@ architecture tb of plCPU_tb is
      signal DEBUG_TMP_REGS     :  STD_LOGIC_VECTOR(32*4 - 1 downto 0);
      signal DEBUG_SAVED_REGS   :  STD_LOGIC_VECTOR(32*4 - 1 downto 0);
      signal DEBUG_MEM_CONTENTS :  STD_LOGIC_VECTOR(32*4 - 1 downto 0);
-     --Value of PC.write_enable
-     signal DEBUG_PC_WRITE_ENABLE : STD_LOGIC;
+     
 
 begin
-	UUT:entity work.PipelinedCPU1 port map(clk ,rst ,DEBUG_IF_SQUASH ,DEBUG_REG_EQUAL , DEBUG_FORWARDA, DEBUG_FORWARDB, DEBUG_PC, DEBUG_PCPlus4_ID, DEBUG_PCPlus4_EX, DEBUG_PCPlus4_MEM,DEBUG_PCPlus4_WB,DEBUG_MemWrite, DEBUG_MemWrite_EX, DEBUG_MemWrite_MEM, DEBUG_RegWrite, DEBUG_RegWrite_EX, DEBUG_RegWrite_MEM, DEBUG_RegWrite_WB, DEBUG_Branch, DEBUG_Jump,DEBUG_INSTRUCTION,DEBUG_TMP_REGS,DEBUG_SAVED_REGS,DEBUG_MEM_CONTENTS,DEBUG_PC_WRITE_ENABLE);
+	UUT:entity work.PipelinedCPU2 port map(clk ,rst ,DEBUG_IF_SQUASH ,DEBUG_REG_EQUAL , DEBUG_FORWARDA, DEBUG_FORWARDB, DEBUG_PC, DEBUG_PCPlus4_ID, DEBUG_PCPlus4_EX, DEBUG_PCPlus4_MEM,DEBUG_PCPlus4_WB,DEBUG_MemWrite, DEBUG_MemWrite_EX, DEBUG_MemWrite_MEM, DEBUG_RegWrite, DEBUG_RegWrite_EX, DEBUG_RegWrite_MEM, DEBUG_RegWrite_WB, DEBUG_Branch, DEBUG_Jump, DEBUG_PC_WRITE_ENABLE, DEBUG_INSTRUCTION,DEBUG_TMP_REGS,DEBUG_SAVED_REGS,DEBUG_MEM_CONTENTS);
 	clk_pro:process
 		constant clk_period: time := 10 ns;
 		begin

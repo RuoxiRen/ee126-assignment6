@@ -15,10 +15,9 @@ begin
 	process(data1,data2)
 	begin
 		if data1 = data2 then
-			equal = '1';
+			equal <= '1';
 		else 
-			equal = '0';
+			equal <= '0';
 		end if;
-	end
 	end process;
 end isEqual_arch;

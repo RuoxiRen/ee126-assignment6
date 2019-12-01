@@ -264,6 +264,7 @@ component IFIDReg is
 port(
      clk            : in   STD_LOGIC; 
      rst            : in   STD_LOGIC;
+     flush          : in   STD_LOGIC;
      write_enable   : in   STD_LOGIC;
      addressIn      : in   STD_LOGIC_VECTOR(31 downto 0); 
      instructionIn  : in   STD_LOGIC_VECTOR(31 downto 0); 
@@ -460,7 +461,7 @@ U0: PC port map(clk,PCenSt,rst,PCin,PCout);
 U1: IMEM port map(PCout,InstructionIF);
 U2: ADDPC port map(PCout,X"00000004",PCadd4IF);
 
-U4: IFIDReg port map(clk,rst,IFIDen or BranchID or JumpID,PCadd4IF,InstructionIF,PCadd4ID,InstructionID);
+U4: IFIDReg port map(clk,rst,BranchSigID or JumpID,IFIDen,PCadd4IF,InstructionIF,PCadd4ID,InstructionID);
 
 -- ID
 
@@ -475,7 +476,7 @@ U10: isEqual port map(ReadData1ID,ReadData2ID,EqualID);
 U11: AND2 port map(BranchID,EqualID,BranchSigID);
 U12: ADDALU port map(PCadd4ID,Imm4ID,BranchAddrID);
 U13: MUX32Branch port map(PCadd4IF,BranchAddrID,BranchSigID,IAddr0);
-U14: ShiftLeft2Jump port map("000000"&Instruction(25 downto 0),JumpAddrID);
+U14: ShiftLeft2Jump port map("000000"&InstructionID(25 downto 0),JumpAddrID);
 U15: MUX32Jump port map (IAddr0,JumpAddrID,JumpID,PCin);
 U16: ShiftLeft2Imm port map(ImmID,Imm4ID);
 
@@ -525,7 +526,7 @@ U28: MUX32WB port map(ALUResWB,MEMRDataWB,MemtoRegWB,WritedataWB);
 
 
 -- PCenSt <='1';
-DEBUG_INSTRUCTION <= InstructionIF;
+DEBUG_INSTRUCTION <= InstructionID;
 DEBUG_TMP_REGS <= tmpReg;
 DEBUG_SAVED_REGS <= savedReg;
 DEBUG_MEM_CONTENTS <= MEMContents;
@@ -537,7 +538,7 @@ DEBUG_PCPlus4_MEM <= PCadd4MEM;
 DEBUG_PCPlus4_WB <= PCadd4WB;
 
  --Probe ports used for testing or for the tracker.
-DEBUG_IF_SQUASH <= BranchID or JumpID;
+DEBUG_IF_SQUASH <= BranchSigID or JumpID;
 DEBUG_REG_EQUAL <= EqualID;
 -- instruction is a store.
 DEBUG_MemWrite <= MemWriteID;
@@ -549,7 +550,7 @@ DEBUG_RegWrite_EX <= WBsigEX(1);
 DEBUG_RegWrite_MEM <= WBsigMEM(1);
 DEBUG_RegWrite_WB <= RegWriteWB;
 -- instruction is a branch or a jump.
-DEBUG_Branch <= BranchID;
+DEBUG_Branch <= BranchSigID;
 DEBUG_Jump <= JumpID;
 --Value of PC.write_enable
 DEBUG_PC_WRITE_ENABLE <= PCenSt;
